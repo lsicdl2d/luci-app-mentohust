@@ -49,7 +49,7 @@ jobs:
       - name: Building packages
         uses: openwrt/gh-action-sdk@main
         env:
-          ARCH: ${{ matrix.arch }}-immortalwrt-25.12
+          ARCH: ${{ matrix.arch }}-openwrt-25.12
           FEEDNAME: packages_ci
           PACKAGES: luci-app-mentohust
           NO_REFRESH_CHECK: true
