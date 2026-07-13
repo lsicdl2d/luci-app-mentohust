@@ -42,23 +42,24 @@ jobs:
           - x86_64
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Building packages
         uses: sbwml/openwrt-gh-action-sdk@master
         env:
-          ARCH: ${{ matrix.arch }}-openwrt-21.02
+          ARCH: ${{ matrix.arch }}-immortalwrt-25.12
           FEEDNAME: packages_ci
           PACKAGES: luci-app-mentohust
           NO_REFRESH_CHECK: true
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.arch }}
-          path: bin/packages/${{ matrix.arch }}/packages_ci/*.ipk
+          # 关键修改 2：收集产物时，寻找 .apk 后缀的文件
+          path: bin/packages/${{ matrix.arch }}/packages_ci/*.apk
 
       - name: Upload packages
         uses: ncipollo/release-action@v1
@@ -66,4 +67,5 @@ jobs:
           token: ${{ secrets.workflow_token }}
           allowUpdates: true
           replacesArtifacts: true
-          artifacts: "bin/packages/${{ matrix.arch }}/packages_ci/*.ipk"
+          # 关键修改 3：发布到 Release 时，上传 .apk 文件
+          artifacts: "bin/packages/${{ matrix.arch }}/packages_ci/*.apk"
